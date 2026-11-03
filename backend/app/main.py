@@ -21,7 +21,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    description="UK Wind Generation Forecast Reconstruction & Procurement Analytics Platform",
+    description="e-consumption: UK Wind Generation Forecast Reconstruction & Procurement Analytics Platform",
     lifespan=lifespan
 )
 

@@ -160,7 +160,7 @@ export const AppContent: React.FC = () => {
       <footer className="border-t border-slate-200 dark:border-trading-border bg-white dark:bg-trading-card px-6 py-4 text-xs text-slate-500 dark:text-slate-400 mt-auto">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div>
-            <span className="font-semibold text-slate-700 dark:text-slate-200">UK Wind Analytics & Procurement Platform</span> | January 2026 Elexon BMRS FUELHH & WINDFOR Datasets
+            <span className="font-semibold text-slate-700 dark:text-slate-200">e-consumption Platform</span> | January 2026 Elexon BMRS FUELHH & WINDFOR Datasets
           </div>
           <div className="flex items-center space-x-4 text-[11px]">
             <span>Day-Ahead Decision Cutoff: {selectedCutoff} GMT on D-1</span>

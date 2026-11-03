@@ -1,5 +1,5 @@
-# UK Wind Generation Forecast & Procurement Analytics Platform
-### Enterprise Day-Ahead Analytics & Imbalance Exposure Engine for UK Electricity Procurement
+# e-consumption
+### UK Wind Generation Forecast & Procurement Analytics Platform
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![React](https://img.shields.io/badge/React-18+-61DAFB?logo=react&logoColor=black)](https://react.dev)
@@ -244,8 +244,8 @@ docker compose up --build
 1. Push this repository to GitHub.
 2. In the Render Dashboard, click **New +** > **Blueprint**.
 3. Select this repository. Render automatically reads `render.yaml`:
-   * Provisions a managed PostgreSQL instance (`gridwind-postgres`).
-   * Builds and deploys the FastAPI web service (`gridwind-analytics-api`).
+   * Provisions a managed PostgreSQL instance (`e-consumption-postgres`).
+   * Builds and deploys the FastAPI web service (`e-consumption-api`).
    * Automatically sets `DATABASE_URL` from the database connection string.
 4. Run the ingestion script once via Render Shell or SSH:
    ```bash
@@ -284,8 +284,8 @@ backend/tests/test_reconstruction.py::test_forecast_history_tracking PASSED
 
 ### Frontend Vitest Suite
 ```
- ✓ src/tests/MetricCard.test.tsx (2 tests)
- ✓ src/tests/TabsNav.test.tsx (2 tests)
+ PASS src/tests/MetricCard.test.tsx (2 tests)
+ PASS src/tests/TabsNav.test.tsx (2 tests)
 
 Test Files  2 passed (2)
      Tests  4 passed (4)

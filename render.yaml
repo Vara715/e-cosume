@@ -1,13 +1,13 @@
 services:
   - type: web
-    name: gridwind-analytics-api
+    name: e-consumption-api
     runtime: python
     buildCommand: pip install -r backend/requirements.txt
     startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: gridwind-postgres
+          name: e-consumption-postgres
           property: connectionString
       - key: ELEXON_BASE_URL
         value: https://data.elexon.co.uk/bmrs/api/v1
@@ -17,7 +17,7 @@ services:
         value: '["*"]'
 
 databases:
-  - name: gridwind-postgres
+  - name: e-consumption-postgres
     databaseName: wind_procurement
     user: postgres
     plan: free

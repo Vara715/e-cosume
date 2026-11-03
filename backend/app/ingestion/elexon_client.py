@@ -76,7 +76,7 @@ class ElexonClient:
         return records
 
     def _get_with_retry(self, url: str, params: Dict[str, str], max_retries: int) -> Any:
-        client = httpx.Client(timeout=self.timeout, headers={"User-Agent": "UK-Wind-Analytics-Platform/1.0"})
+        client = httpx.Client(timeout=self.timeout, headers={"User-Agent": "e-consumption/1.0"})
         last_error = None
 
         for attempt in range(1, max_retries + 1):

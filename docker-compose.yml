@@ -3,7 +3,7 @@ version: '3.8'
 services:
   db:
     image: postgres:16-alpine
-    container_name: gridwind_postgres
+    container_name: e_consumption_postgres
     environment:
       POSTGRES_DB: wind_procurement
       POSTGRES_USER: postgres
@@ -22,7 +22,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: gridwind_backend
+    container_name: e_consumption_backend
     restart: unless-stopped
     depends_on:
       db:
@@ -39,7 +39,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: gridwind_frontend
+    container_name: e_consumption_frontend
     restart: unless-stopped
     depends_on:
       - backend

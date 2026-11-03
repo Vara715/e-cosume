@@ -1,4 +1,5 @@
-# UK Wind Generation Forecast Analytics Platform
+# e-consumption Platform
+## UK Wind Generation Forecast Analytics
 ## Video Presentation Scripts & Demonstration Guide
 
 **Total Duration:** Maximum 10 minutes  
@@ -23,7 +24,7 @@
 > 
 > The central analytical challenge is **lookahead bias**. If your analytics team evaluates forecast performance using the latest forecast issued minutes before physical dispatch, you are evaluating an intraday operational forecast that was not commercially available when trading closed.
 > 
-> We have built the **GridWind Analytics Platform** to solve this exact problem: reconstructing the frozen day-ahead view available at gate closure, auditing historical accuracy, and quantifying our true imbalance exposure."
+> We have built the **e-consumption platform** to solve this exact problem: reconstructing the frozen day-ahead view available at gate closure, auditing historical accuracy, and quantifying our true imbalance exposure."
 
 ---
 
@@ -85,7 +86,7 @@
 **Screen Cue:** Architecture Diagram from README / code repository structure.
 
 **Spoken Script:**
-> "Welcome to the technical review of the GridWind Analytics Platform.
+> "Welcome to the technical review of the e-consumption platform.
 > 
 > The application is built on a modern decoupled architecture:
 > * **Backend:** Python 3.11 with FastAPI for high-performance async REST endpoints, SQLAlchemy 2 for ORM, and NumPy/Pandas for vectorised statistical calculations.
@@ -147,4 +148,4 @@
 > * For production cloud hosting, `render.yaml` defines a Render Blueprint that provisions a managed PostgreSQL instance and deploys the FastAPI container with automatic database URL injection.
 > * The frontend deploys to Vercel with single-page application routing rules configured in `vercel.json`.
 > 
-> In summary, the GridWind Analytics Platform delivers enterprise-grade software engineering, strict domain accuracy, point-in-time backtesting integrity, and an intuitive user experience for UK power procurement professionals. Thank you."
+> In summary, the e-consumption platform delivers enterprise-grade software engineering, strict domain accuracy, point-in-time backtesting integrity, and an intuitive user experience for UK power procurement professionals. Thank you."

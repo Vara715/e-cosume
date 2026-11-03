@@ -57,7 +57,7 @@ def get_metadata(db: Session = Depends(get_db)):
     latest_run = db.query(IngestionRun).order_by(IngestionRun.started_at.desc()).first()
 
     return {
-        "dataset_target": "January 2026 UK Wind Generation",
+        "dataset_target": "e-consumption (January 2026 UK Wind Generation)",
         "default_cutoff_time": settings.DEFAULT_CUTOFF_TIME,
         "supported_cutoffs": ["09:00", "10:00", "11:00", "12:00", "16:00", "17:00"],
         "actuals_range": {

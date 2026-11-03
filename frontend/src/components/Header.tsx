@@ -34,7 +34,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div>
             <div className="flex items-center space-x-2">
               <h1 className="font-bold text-base tracking-tight text-slate-900 dark:text-white">
-                GRIDWIND <span className="text-cyan-500">ANALYTICS</span>
+                e-consumption <span className="text-cyan-500 font-semibold">Analytics</span>
               </h1>
               <span className="text-[10px] font-semibold bg-slate-100 dark:bg-trading-surface text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded border border-slate-300 dark:border-trading-border uppercase">
                 UK Day-Ahead
