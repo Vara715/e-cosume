@@ -18,6 +18,9 @@ frontend/dist/
 dist/
 .npm
 
+# Presentation scripts (kept locally only)
+PRESENTATION_SCRIPTS.md
+
 # OS / IDE
 .DS_Store
 Thumbs.db
