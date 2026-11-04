@@ -188,8 +188,8 @@ Audit table recording dataset name, requested ranges, records received, records 
 ### 1. Clone & Set Up Backend
 ```bash
 # Clone the repository
-git clone <repo-url>
-cd <repo-dir>
+git clone https://github.com/Vara715/e-cosume.git
+cd e-consume
 
 # Install backend dependencies
 pip install -r backend/requirements.txt
