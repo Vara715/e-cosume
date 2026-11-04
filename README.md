@@ -1,8 +1,10 @@
 # e-consumption
 ### UK Wind Generation Forecast & Procurement Analytics Platform
 
+[![Vercel](https://img.shields.io/badge/Vercel-Live%20Deployment-000000?logo=vercel&logoColor=white)](https://e-cosume.vercel.app/)
+[![Render](https://img.shields.io/badge/Render-API%20Active-46E3B7?logo=render&logoColor=black)](https://e-consumption-api.onrender.com/docs)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
-[![React](https://img.shields.io/badge/React-18+-61DAFB?logo=react&logoColor=black)](https://react.dev)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4+-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16+-336791?logo=postgresql&logoColor=white)](https://www.postgresql.org)
@@ -39,12 +41,17 @@ This platform reconstructs the exact **frozen day-ahead forecast view** availabl
    * Fully configurable cutoffs (11:00 EPEX Spot, 12:00 Nord Pool, 16:00 Desk Close, 17:00 Evening Final).
 2. **Preservation of Full Revision History:**
    * Ingests and retains all historical publications without overwriting.
-   * Enables backtesting, auditability, and forecast drift analysis.
-3. **Dual Enterprise Design System:**
+   * Enables backtesting, auditability, and forecast drift analysis across rolling updates.
+3. **Client-Side In-Memory Response Caching:**
+   * High-efficiency in-memory response cache integrated into the frontend API service layer.
+   * Eliminates redundant network round-trips when toggling between analytical modules (Overview, Comparison, Accuracy, Evolution).
+   * Delivers zero-latency tab transitions without layout shifts or repeated loading spinners.
+   * Features integrated cache invalidation tied to the global header refresh action.
+4. **Dual Enterprise Design System:**
    * **Previse Coral Dark Enterprise Theme:** Slate navy trading desk aesthetic (`#0b131b` / `#13222f`) with high-contrast cyan, amber, and emerald stepped curves.
    * **ML6 Light Minimalist Theme:** Clean white and slate aesthetic with executive metric sidebars and stepped lines.
    * Instant one-click toggle with persisted preference.
-4. **Interactive Analytical Modules:**
+5. **Interactive Analytical Modules:**
    * **Overview Dashboard:** Executive stats (Daily Avg, Peak MW, Actual Mean, Daily MAE, Directional Bias, Completeness) + 24-hour stepped profile + error delta bars + interval audit table.
    * **Actual vs. Forecast Comparison:** Multi-day continuous timeseries with brush zoom/pan, CSV export, and Parity Scatter Plot with $y = x$ reference line.
    * **Accuracy Analytics:** Statistical KPIs (MAE, RMSE, WAPE, Bias, Max AE, Median AE) + Daily performance bar chart + 24-hour Diurnal curve + 8-bin Error Distribution Histogram.
@@ -71,8 +78,8 @@ flowchart TD
         API["REST API Router<br/>(OpenAPI / FastAPI)"]
     end
 
-    subgraph Frontend [React + Vite + TypeScript]
-        ROUTER["State & Query Management"]
+    subgraph Frontend [React 19 + TypeScript + Vite]
+        CACHE["In-Memory API Cache<br/>(Zero-Latency Tab Navigation)"]
         THEME["Theme Context<br/>(Previse Dark / ML6 Light)"]
         VIEWS["Dashboard Views<br/>(Overview, Comparison, Accuracy, Evolution, Simulator)"]
         CHARTS["Recharts Visualization Engine<br/>(Stepped Curves, Histograms, Parity Scatter)"]
@@ -85,18 +92,18 @@ flowchart TD
     RECON --> ANALYTICS
     ANALYTICS --> API
     SCENARIO --> API
-    API --> ROUTER
-    ROUTER --> VIEWS
+    API --> CACHE
+    CACHE --> VIEWS
     THEME --> VIEWS
     VIEWS --> CHARTS
 ```
 
 ### Technology Decisions
-* **Frontend:** React 18, TypeScript, Vite, Tailwind CSS, Recharts, Lucide React.
-* **Backend:** Python 3.11, FastAPI, Pydantic v2, SQLAlchemy 2, NumPy, Pandas, httpx.
-* **Database:** PostgreSQL (production on Render / Docker) with zero-setup SQLite fallback for local development.
+* **Frontend:** React 19, TypeScript, Vite, Tailwind CSS, Recharts, Lucide React.
+* **Backend:** Python 3.11, FastAPI, Pydantic v2, SQLAlchemy 2, NumPy, Pandas, httpx, psycopg v3.
+* **Database:** Cloud PostgreSQL (Supabase / Render) with zero-setup SQLite fallback for local development.
 * **Containerization:** Multi-stage Dockerfiles and Docker Compose.
-* **Testing:** Pytest (13 tests) and Vitest (4 tests).
+* **Testing:** Pytest (13 backend tests) and Vitest (4 frontend tests).
 
 ---
 
@@ -179,56 +186,51 @@ Audit table recording dataset name, requested ranges, records received, records 
 
 ---
 
-## 7. Local Setup & Quickstart
+## 7. Live Production Deployments & Infrastructure
+
+The platform is deployed across a decoupled cloud topology:
+
+* **Production Web Application (Vercel):** [https://e-cosume.vercel.app/](https://e-cosume.vercel.app/)
+  * Global Edge CDN distribution with automated SPA client routing.
+  * In-memory client-side response caching for zero-latency module navigation.
+* **Production REST API Service (Render):** [https://e-consumption-api.onrender.com](https://e-consumption-api.onrender.com)
+  * Asynchronous FastAPI backend worker executing point-in-time reconstruction and statistical modeling.
+  * Interactive OpenAPI Swagger Documentation: [https://e-consumption-api.onrender.com/docs](https://e-consumption-api.onrender.com/docs)
+* **Cloud Database (Supabase PostgreSQL):**
+  * Managed PostgreSQL instance in AWS Asia-Pacific (`aws-0-ap-northeast-2`).
+  * Ingested and verified dataset: 1,489 `FUELHH` wind actuals and 20,440 `WINDFOR` forecasts for January 2026.
+* **Source Repository:** [https://github.com/Vara715/e-cosume](https://github.com/Vara715/e-cosume)
+
+---
+
+## 8. Local Setup & Verification
 
 ### Prerequisites
 * Python 3.11+
 * Node.js v20+ and npm
 
-### 1. Clone & Set Up Backend
+### Local Execution
 ```bash
-# Clone the repository
+# Clone repository
 git clone https://github.com/Vara715/e-cosume.git
-cd e-consume
+cd e-cosume
 
-# Install backend dependencies
+# Backend Setup & Test Suite
 pip install -r backend/requirements.txt
-
-# Run backend test suite
 python -m pytest backend/tests -v
-```
 
-### 2. Populate Database (January 2026 Ingestion)
-```bash
-# Ingests January 2026 actuals (1,489 records) and forecasts from Dec 28, 2025 to Feb 1, 2026 (20,440 records)
-python -m backend.app.ingestion.pipeline
-```
-
-### 3. Launch Backend API Server
-```bash
+# Start Backend API Server
 python -m uvicorn backend.app.main:app --port 8000 --reload
-# API Docs available at http://localhost:8000/docs
-```
 
-### 4. Launch Frontend Application
-```bash
+# Frontend Setup & Test Suite
 cd frontend
 npm install
-
-# Run frontend test suite
-npm run test
-
-# Launch Vite dev server
+npm test
+npm run build
 npm run dev
-# Dashboard accessible at http://localhost:5173
 ```
 
----
-
-## 8. Docker & Docker Compose Setup
-
-Run the entire multi-service stack with a single command:
-
+### Docker Orchestration
 ```bash
 docker compose up --build
 ```
@@ -238,32 +240,9 @@ docker compose up --build
 
 ---
 
-## 9. Production Deployment Guide
+## 9. Automated Test Verification
 
-### Backend & Database on Render
-1. Push this repository to GitHub.
-2. In the Render Dashboard, click **New +** > **Blueprint**.
-3. Select this repository. Render automatically reads `render.yaml`:
-   * Provisions a managed PostgreSQL instance (`e-consumption-postgres`).
-   * Builds and deploys the FastAPI web service (`e-consumption-api`).
-   * Automatically sets `DATABASE_URL` from the database connection string.
-4. Run the ingestion script once via Render Shell or SSH:
-   ```bash
-   python -m backend.app.ingestion.pipeline
-   ```
-
-### Frontend on Vercel
-1. In Vercel, click **Add New Project** and select this repository.
-2. Set the **Root Directory** to `frontend`.
-3. Set the Environment Variable:
-   * `VITE_API_URL` = `https://<your-render-backend-url>/api/v1`
-4. Click **Deploy**. Vercel will build and serve the single-page application with automatic SPA routing.
-
----
-
-## 10. Test Execution Results
-
-### Backend Pytest Suite
+### Backend Pytest Suite (13 Passed)
 ```
 backend/tests/test_analytics.py::test_deterministic_metric_calculations PASSED
 backend/tests/test_analytics.py::test_zero_actual_generation_wape_safety PASSED
@@ -282,19 +261,19 @@ backend/tests/test_reconstruction.py::test_forecast_history_tracking PASSED
 ======================== 13 passed in 0.93s ========================
 ```
 
-### Frontend Vitest Suite
+### Frontend Vitest Suite (4 Passed)
 ```
  PASS src/tests/MetricCard.test.tsx (2 tests)
  PASS src/tests/TabsNav.test.tsx (2 tests)
 
 Test Files  2 passed (2)
      Tests  4 passed (4)
-======================== 4 passed in 1.55s ========================
+======================== 4 passed in 1.80s ========================
 ```
 
 ---
 
-## 11. Known Domain Limitations & Honest Engineering Boundary
+## 10. Known Domain Limitations & Engineering Boundary
 
 1. **Exclusion of Consumer Demand:**
    The assignment explicitly excludes consumer demand datasets. Consequently, the platform **does not claim to compute true net commercial trade volumes or monetary trading positions**. Doing so without actual national demand data would be misleading. Instead, the platform focuses directly on **wind forecast uncertainty and volumetric delta exposure**, complemented by an interactive Illustrative Demand Simulator clearly labeled as a sensitivity tool.
@@ -303,6 +282,6 @@ Test Files  2 passed (2)
 
 ---
 
-## 12. AI Tools Disclosure
+## 11. AI Tools Disclosure
 
 This application was engineered and developed using **Google Antigravity**, operating with an autonomous senior full-stack engineering workflow spanning domain research, Elexon API investigation, statistical modeling, database design, frontend implementation, testing, containerization, and documentation.

@@ -41,27 +41,36 @@ export const AppContent: React.FC = () => {
   }, []);
 
   // Fetch Overview Data on date or cutoff change
-  const fetchOverview = useCallback(() => {
-    setLoadingOverview(true);
-    api.getOverview(selectedDate, selectedCutoff)
+  const fetchOverview = useCallback((bypassCache: boolean = false) => {
+    const endpoint = `/overview?delivery_date=${selectedDate}&cutoff_time=${selectedCutoff}`;
+    if (bypassCache || !api.hasCache(endpoint)) {
+      setLoadingOverview(true);
+    }
+    api.getOverview(selectedDate, selectedCutoff, bypassCache)
       .then(setOverviewData)
       .catch((err) => console.error('Overview error:', err))
       .finally(() => setLoadingOverview(false));
   }, [selectedDate, selectedCutoff]);
 
   // Fetch Comparison Data
-  const fetchComparison = useCallback(() => {
-    setLoadingComparison(true);
-    api.getComparison(startDate, endDate, selectedCutoff)
+  const fetchComparison = useCallback((bypassCache: boolean = false) => {
+    const endpoint = `/comparison?start_date=${startDate}&end_date=${endDate}&cutoff_time=${selectedCutoff}`;
+    if (bypassCache || !api.hasCache(endpoint)) {
+      setLoadingComparison(true);
+    }
+    api.getComparison(startDate, endDate, selectedCutoff, bypassCache)
       .then(setComparisonData)
       .catch((err) => console.error('Comparison error:', err))
       .finally(() => setLoadingComparison(false));
   }, [startDate, endDate, selectedCutoff]);
 
   // Fetch Accuracy Summary
-  const fetchAccuracy = useCallback(() => {
-    setLoadingAccuracy(true);
-    api.getAccuracy(startDate, endDate, selectedCutoff)
+  const fetchAccuracy = useCallback((bypassCache: boolean = false) => {
+    const endpoint = `/accuracy?start_date=${startDate}&end_date=${endDate}&cutoff_time=${selectedCutoff}`;
+    if (bypassCache || !api.hasCache(endpoint)) {
+      setLoadingAccuracy(true);
+    }
+    api.getAccuracy(startDate, endDate, selectedCutoff, bypassCache)
       .then(setAccuracyData)
       .catch((err) => console.error('Accuracy error:', err))
       .finally(() => setLoadingAccuracy(false));
@@ -81,12 +90,13 @@ export const AppContent: React.FC = () => {
 
   const handleRefreshAll = async () => {
     setIsRefreshing(true);
+    api.clearCache();
     try {
       await Promise.all([
-        api.getMetadata().then(setMetadata),
-        fetchOverview(),
-        activeTab === 'comparison' ? fetchComparison() : Promise.resolve(),
-        activeTab === 'accuracy' ? fetchAccuracy() : Promise.resolve(),
+        api.getMetadata(true).then(setMetadata),
+        fetchOverview(true),
+        activeTab === 'comparison' ? fetchComparison(true) : Promise.resolve(),
+        activeTab === 'accuracy' ? fetchAccuracy(true) : Promise.resolve(),
       ]);
     } finally {
       setIsRefreshing(false);

@@ -32,7 +32,10 @@ export const ForecastEvolutionView: React.FC<ForecastEvolutionViewProps> = ({
 
   useEffect(() => {
     let isMounted = true;
-    setLoading(true);
+    const endpoint = `/forecasts/history?target_time=${encodeURIComponent(targetIso)}&cutoff_time=${cutoffTime}`;
+    if (!api.hasCache(endpoint)) {
+      setLoading(true);
+    }
     setError(null);
 
     api.getForecastHistory(targetIso, cutoffTime)
